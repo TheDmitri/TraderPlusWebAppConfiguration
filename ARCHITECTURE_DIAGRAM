@@ -1,0 +1,39 @@
+ARCHITECTURE DIAGRAM
+
+```mermaid
+---
+config:
+  layout: elk
+---
+graph TD
+    subgraph Frontend -Angular-
+        A[User Interface] -->|HTTP Requests| B[Angular HttpClient]
+    end
+    subgraph Backend -NestJS-
+        B --> C[NestJS Controllers]
+        C --> D[NestJS Services]
+        D --> E[Prisma Client]
+    end
+    subgraph Authentication -Supabase-
+        F[Supabase Auth -Discord OAuth-]
+    end
+    subgraph Database -Supabase PostgreSQL-
+        E --> G[-Prisma ORM-]
+        G --> H[-Supabase PostgreSQL Database-]
+    end
+    A[User Interface] --> |Login| F[Supabase Auth -Discord OAuth-]
+    F --> |Authenticated User| B[Angular HttpClient]
+    B --> |CRUD Operations| C[NestJS Controllers]
+    C --> |Business Logic| D[NestJS Services]
+    D --> |Database Interaction| E[Prisma Client]
+    E --> |Execute Queries| G[-Prisma ORM-]
+    G --> |Store & Retrieve JSON| H[-Supabase PostgreSQL Database-]
+    classDef frontend fill:#ffdd99,stroke:#333,stroke-width:2px;
+    classDef backend fill:#d5e8d4,stroke:#333,stroke-width:2px;
+    classDef auth fill:#f8cecc,stroke:#333,stroke-width:2px;
+    classDef database fill:#dae8fc,stroke:#333,stroke-width:2px;
+    class Frontend frontend;
+    class Backend backend;
+    class Authentication auth;
+    class Database database;
+```
